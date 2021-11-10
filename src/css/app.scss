@@ -1,0 +1,10 @@
+// app global css in SCSS form
+@font-face {
+  font-family: "clockicons";
+  src: url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.eot"); /* IE9*/
+  src: url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+  url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.woff2") format("woff2"), /* chrome、firefox */
+  url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.woff") format("woff"), /* chrome、firefox */
+  url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.svg#clockicons") format("svg"); /* iOS 4.1- */
+}
