@@ -40,9 +40,11 @@
       <q-dialog
               v-model="breakMode">
              <q-card persistent style="width: 700px; max-width: 80vw;">
-                <q-card-section class="justify-center">
-                  <div class="text-h6">Intervallo</div>
-                </q-card-section>
+               <q-card-section class="row items-center q-pb-none">
+                   <div class="text-h6">Intervallo</div>
+                   <q-space />
+                   <q-btn icon="close" flat round dense v-close-popup />
+                 </q-card-section>
                 <q-card-section class="q-pt-none">
                   <div class="column items-center">
                     <CountDown v-bind:time="600" @time-elapsed="onBreakEnd"/>
@@ -72,8 +74,11 @@ export default defineComponent({
   setup () {
     const $store = useStore()
 
-    const breakMode = computed(() => {
-      return $store.getters['scoreboard/breakMode']
+    const breakMode = computed({
+      get: () => $store.getters['scoreboard/breakMode'],
+      set: val => {
+        $store.commit('scoreboard/updateBreakMode', val)
+      }
     })
     const period = computed({
       get: () => $store.getters['scoreboard/period'],

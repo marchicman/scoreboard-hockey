@@ -37,6 +37,7 @@
       <q-list>
         <q-item-label
           header
+          v-if="essentialLinks.length > 0"
         >
           Essential Links
         </q-item-label>
@@ -45,6 +46,20 @@
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
+        />
+      </q-list>
+      <q-list>
+        <q-item-label
+          header
+          v-if="pageList.length > 0"
+        >
+          Sezioni
+        </q-item-label>
+
+        <PageLink
+          v-for="page in pageList"
+          :key="page.title"
+          v-bind="page"
         />
       </q-list>
     </q-drawer>
@@ -57,13 +72,29 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import PageLink from 'components/PageLink.vue'
 
 const linksList = [
-  {
+  /* {
     title: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
     link: 'https://quasar.dev'
+  } */
+]
+
+const pageList = [
+  {
+    title: 'Tabellone',
+    caption: 'tabellone',
+    icon: 'home',
+    to: 'home'
+  },
+  {
+    title: 'Statistiche',
+    caption: 'statistiche',
+    icon: 'insights',
+    to: 'statistics'
   }
 ]
 
@@ -74,7 +105,8 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    PageLink
   },
 
   setup () {
@@ -88,6 +120,7 @@ export default defineComponent({
     }
     return {
       essentialLinks: linksList,
+      pageList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value

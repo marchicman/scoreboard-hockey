@@ -27,7 +27,7 @@
                 color="white"
                 text-color="primary"
                 label="Timeout"
-                @click="callTimeout">
+                @click="callTimeout" :disable="playMode">
            <q-badge color="orange" floating>{{ teamTimeout }}</q-badge>
           </q-btn>
           <q-btn
@@ -35,7 +35,7 @@
                 color="white"
                 text-color="primary"
                 label="Penalità"
-                @click="penalty = true" />
+                @click="penalty = true" :disable="playMode"/>
       </q-card-actions>
     </q-card>
       <div class="col">
@@ -100,12 +100,10 @@ export default defineComponent({
     const foulTime = ref(2)
     const foulType = ref(null)
     const foulPlayer = ref(null)
+
     const teamId = computed(() => {
       return props.team.id
     })
-    /* const teamName = computed(() => {
-      return props.team.name
-    }) */
     const teamName = computed({
       get: () => props.team.name,
       set: val => {
