@@ -194,6 +194,7 @@ module.exports = configure(function (ctx) {
       bundler: 'packager', // 'packager' or 'builder'
 
       packager: {
+        platform: 'win32',
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
         // OS X / Mac App Store
@@ -203,7 +204,9 @@ module.exports = configure(function (ctx) {
         // protocol: 'myapp://path',
 
         // Windows only
-        // win32metadata: { ... }
+        win32metadata: {
+          requestedExecutionLevel: 'asInvoker'
+        }
       },
 
       builder: {

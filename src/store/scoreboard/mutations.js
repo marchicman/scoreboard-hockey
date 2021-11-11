@@ -85,3 +85,7 @@ export const updateTeamName = (state, payload) => {
     team.name = payload.name
   }
 }
+
+export const updateBreakMode = (state, value) => {
+  state.breakMode = value
+}

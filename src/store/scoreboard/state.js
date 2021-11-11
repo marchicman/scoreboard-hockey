@@ -6,11 +6,12 @@ export default function () {
     interval: 600, // 10 minuti
     playMode: false,
     timeoutMode: false,
+    breakMode: false,
     timeoutTeam: '',
     teams: [
       {
         id: 1,
-        name: 'Invicta Skate Modena',
+        name: 'Team 1',
         iconUrl: null,
         score: 0,
         timeout: 0,
@@ -19,7 +20,7 @@ export default function () {
       },
       {
         id: 2,
-        name: 'TecnoAlt Civitavecchia',
+        name: 'Team 2',
         iconUrl: null,
         score: 0,
         timeout: 0,

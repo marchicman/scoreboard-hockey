@@ -25,3 +25,7 @@ export function visitorTeam (state) {
 export function period (state) {
   return state.period
 }
+
+export function breakMode (state) {
+  return state.breakMode
+}

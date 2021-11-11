@@ -37,7 +37,19 @@
             </q-card-section>
          </q-card>
       </q-dialog>
-    <!-- <CountDownDialog :isOpen="timeoutMode" :title="timeoutTitle" :seconds="60" @time-end="onTimeoutEnd"/> -->
+      <q-dialog
+              v-model="breakMode">
+             <q-card persistent style="width: 700px; max-width: 80vw;">
+                <q-card-section class="justify-center">
+                  <div class="text-h6">Intervallo</div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <div class="column items-center">
+                    <CountDown v-bind:time="600" @time-elapsed="onBreakEnd"/>
+                  </div>
+                </q-card-section>
+             </q-card>
+      </q-dialog>
   </q-page>
 </template>
 
@@ -60,6 +72,9 @@ export default defineComponent({
   setup () {
     const $store = useStore()
 
+    const breakMode = computed(() => {
+      return $store.getters['scoreboard/breakMode']
+    })
     const period = computed({
       get: () => $store.getters['scoreboard/period'],
       set: val => {
@@ -78,11 +93,14 @@ export default defineComponent({
     const timeoutTeam = computed(() => {
       return $store.getters['scoreboard/timeoutTeam']
     })
+    const onBreakEnd = () => {
+      breakMode.value = false
+    }
     const onTimeoutEnd = () => {
       $store.commit('scoreboard/finishTimeout')
     }
 
-    return { period, timeoutMode, timeoutTeam, homeTeam, visitorTeam, onTimeoutEnd }
+    return { breakMode, period, timeoutMode, timeoutTeam, homeTeam, visitorTeam, onTimeoutEnd, onBreakEnd }
   }
 })
 </script>
