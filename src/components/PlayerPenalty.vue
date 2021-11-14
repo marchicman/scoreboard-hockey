@@ -8,7 +8,11 @@
         <q-separator vertical />
 
         <q-card-section>
-           <CountDown v-bind:time="penaltyDuration" v-bind:is-running="playMode" @time-elapsed="onPenaltyEnd"/>
+           <CountDown v-bind:time="penaltyDuration"
+                      v-bind:is-running="playMode"
+                      @time-elapsed="onPenaltyEnd"
+                      @update:time="onUpdateTime"
+                      :key="step"/>
         </q-card-section>
 
       </q-card-section>
@@ -17,13 +21,19 @@
        context-menu>
        <q-item clickable v-close-popup>
             <q-item-section @click="onPenaltyEnd">Chiudi</q-item-section>
-          </q-item>
+       </q-item>
+       <q-item clickable v-close-popup>
+            <q-item-section @click="() => adjustPenalty(1)">+1 sec</q-item-section>
+       </q-item>
+       <q-item clickable v-close-popup>
+            <q-item-section @click="() => adjustPenalty(-1)">-1 sec</q-item-section>
+       </q-item>
    </q-menu>
     </q-card>
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
 import CountDown from 'components/CountDown.vue'
@@ -45,12 +55,15 @@ export default defineComponent({
   },
   setup (props) {
     const $store = useStore()
+
+    const step = ref(0)
     const playerNumber = computed(() => {
       return props.penalty.player > 10 ? props.penalty.player + '' : '0' + props.penalty.player
     })
-    const penaltyDuration = computed(() => {
+    /* const penaltyDuration = computed(() => {
       return props.penalty.duration
-    })
+    }) */
+    const penaltyDuration = ref(props.penalty.duration)
     const playMode = computed(() => {
       return $store.getters['scoreboard/playMode']
     })
@@ -58,7 +71,15 @@ export default defineComponent({
       console.log('penalità finita ' + props.penalty.player)
       $store.commit('scoreboard/finishPenalty', { teamId: props.teamId, playerNumber: props.penalty.player })
     }
-    return { playerNumber, penaltyDuration, playMode, onPenaltyEnd }
+    const adjustPenalty = (val) => {
+      console.log(penaltyDuration.value)
+      penaltyDuration.value += val
+      step.value += val
+    }
+    const onUpdateTime = (val) => {
+      penaltyDuration.value = val
+    }
+    return { step, playerNumber, penaltyDuration, playMode, onPenaltyEnd, onUpdateTime, adjustPenalty }
   }
 })
 </script>

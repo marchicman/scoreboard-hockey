@@ -2,11 +2,8 @@
   <div class="column">
   <q-card>
      <q-card-section class="q-pt-none">
-       <q-item clickable>
+       <q-item>
          <q-item-section class="text-h6">{{ teamName }}</q-item-section>
-         <q-popup-edit v-model="teamName" auto-save v-slot="scope">
-           <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
-         </q-popup-edit>
        </q-item>
       </q-card-section>
 
@@ -14,10 +11,7 @@
 
       <q-card-section class="flex items-center justify-center">
         <div class="column items-center cursor-pointer">
-          <span class="teamscore">{{ teamScore }}</span>
-          <q-popup-edit v-model="teamScore" auto-save v-slot="scope">
-            <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
-          </q-popup-edit>
+          <span class="teamscore" @click="score = true" :disable="playMode">{{ teamScore }}</span>
         </div>
       </q-card-section>
 
@@ -66,8 +60,41 @@
                       v-model="foulType"
                       label="Descrizione"/>
               <div>
-                <q-btn label="Submit" type="submit" color="primary"/>
-                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+                <q-btn label="Ok" type="submit" color="primary"/>
+                <q-btn label="Chiudi" type="reset" color="primary" flat class="q-ml-sm" />
+              </div>
+          </q-form>
+        </q-card-section>
+       </q-card>
+      </q-dialog>
+      <q-dialog v-model="score" @before-show="initializeScoreAssist">
+        <q-card class="my-card">
+          <q-card-section>
+            <div class="text-h6">Goal {{ teamName }}</div>
+          </q-card-section>
+          <q-card-section>
+           <q-form
+                  @submit="onSubmitScoreAssist"
+                  @reset="onResetScoreAssist"
+                  class="q-gutter-md">
+              <q-input
+                v-model.number="goal"
+                type="number"
+                filled
+                label="Goal"/>
+              <q-input
+                v-model.number="playerGoal"
+                type="number"
+                filled
+                label="Marcatore"/>
+              <q-input
+                v-model.number="playerAssist"
+                type="number"
+                filled
+                label="Assist"/>
+              <div>
+                <q-btn label="Ok" type="submit" color="primary"/>
+                <q-btn label="Chiudi" type="reset" color="primary" flat class="q-ml-sm" />
               </div>
           </q-form>
         </q-card-section>
@@ -81,6 +108,7 @@ import { defineComponent, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
 import PlayerPenalty from 'components/PlayerPenalty.vue'
+import { eventTypesEnum } from '../utils/enums'
 
 export default defineComponent({
   name: 'TeamScore',
@@ -97,9 +125,13 @@ export default defineComponent({
     const $store = useStore()
 
     const penalty = ref(false)
+    const score = ref(false)
     const foulTime = ref(2)
     const foulType = ref(null)
     const foulPlayer = ref(null)
+    const goal = ref(0)
+    const playerGoal = ref(null)
+    const playerAssist = ref(null)
 
     const teamId = computed(() => {
       return props.team.id
@@ -110,11 +142,14 @@ export default defineComponent({
         $store.commit('scoreboard/updateTeamName', { teamId: props.team.id, name: val })
       }
     })
-    const teamScore = computed({
+    /* const teamScore = computed({
       get: () => props.team.score,
       set: val => {
         $store.commit('scoreboard/updateScore', { teamId: props.team.id, score: val })
       }
+    }) */
+    const teamScore = computed(() => {
+      return props.team.score
     })
     const teamTimeout = computed(() => {
       return props.team.timeout
@@ -141,7 +176,50 @@ export default defineComponent({
       onReset()
     }
 
-    return { penalty, foulTime, foulPlayer, foulType, teamId, teamName, teamScore, teamTimeout, teamPenalties, playMode, callTimeout, onReset, onSubmit }
+    const onResetScoreAssist = () => {
+      score.value = false
+    }
+
+    const onSubmitScoreAssist = () => {
+      $store.commit('scoreboard/insertEvent', {
+        type: eventTypesEnum.goal,
+        score: goal.value,
+        playerGoal: playerGoal.value,
+        playerAssist: playerAssist.value,
+        teamId: props.team.id
+      })
+      onResetScoreAssist()
+    }
+
+    const initializeScoreAssist = () => {
+      console.log('initializeScoreAssist')
+      playerGoal.value = null
+      playerAssist.value = null
+      goal.value = teamScore.value
+    }
+
+    return {
+      score,
+      goal,
+      playerGoal,
+      playerAssist,
+      penalty,
+      foulTime,
+      foulPlayer,
+      foulType,
+      teamId,
+      teamName,
+      teamScore,
+      teamTimeout,
+      teamPenalties,
+      playMode,
+      callTimeout,
+      onReset,
+      onSubmit,
+      initializeScoreAssist,
+      onResetScoreAssist,
+      onSubmitScoreAssist
+    }
   }
 })
 </script>

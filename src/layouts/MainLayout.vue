@@ -17,6 +17,7 @@
 
         <!-- <div>Quasar v{{ $q.version }}</div>-->
         <q-btn flat round dense icon="settings_brightness" class="q-mr-xs" @click="$q.dark.toggle()"/>
+        <q-btn flat round dense icon="fitness_center" class="q-mr-xs" @click="activateWarmUpMode"/>
         <q-btn flat round dense icon="schedule" class="q-mr-xs" @click="activateBreakMode"/>
         <q-btn
             flat
@@ -86,15 +87,18 @@ const linksList = [
 const pageList = [
   {
     title: 'Tabellone',
-    caption: 'tabellone',
     icon: 'home',
     to: 'home'
   },
-  {
+  /*  {
     title: 'Statistiche',
-    caption: 'statistiche',
     icon: 'insights',
     to: 'statistics'
+  }, */
+  {
+    title: 'Impostazioni',
+    icon: 'settings',
+    to: 'settings'
   }
 ]
 
@@ -118,6 +122,10 @@ export default defineComponent({
       // breakMode = !breakMode
       $store.commit('scoreboard/updateBreakMode', true)
     }
+    const activateWarmUpMode = () => {
+      // breakMode = !breakMode
+      $store.commit('scoreboard/updateWarmUpMode', true)
+    }
     return {
       essentialLinks: linksList,
       pageList,
@@ -125,7 +133,8 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      activateBreakMode
+      activateBreakMode,
+      activateWarmUpMode
     }
   }
 })

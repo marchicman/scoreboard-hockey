@@ -8,6 +8,7 @@
 
 <script>
 import { defineComponent, onBeforeMount, onBeforeUnmount, ref, computed } from 'vue'
+import { formatTime, formatTimeDecimals } from '../utils/dateUtils'
 
 export default defineComponent({
   name: 'CountDown',
@@ -29,11 +30,21 @@ export default defineComponent({
   setup (props, context) {
     let timer
     const updateSeconds = () => {
+      if (seconds.value === 60) {
+        clearInterval(timer)
+        timer = setInterval(updateDecimals, 100)
+      } else if (props.isRunning) {
+        seconds.value--
+        context.emit('update:time', seconds.value)
+      }
+    }
+
+    const updateDecimals = () => {
       if (seconds.value === 0) {
         clearInterval(timer)
         context.emit('time-elapsed')
       } else if (props.isRunning) {
-        seconds.value--
+        seconds.value = seconds.value - 0.01
         context.emit('update:time', seconds.value)
       }
     }
@@ -43,12 +54,10 @@ export default defineComponent({
     })
     const seconds = ref(props.time)
     const timePassed = computed(() => {
-      const minutes = Math.round((seconds.value - 30) / 60)
-      const remainingSeconds = (seconds.value % 60)
-      return (minutes < 10 ? '0' : '') + minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds
+      return seconds.value >= 60 ? formatTime(seconds.value) : formatTimeDecimals(seconds.value)
     })
     onBeforeMount(() => {
-      timer = setInterval(updateSeconds, 1000)
+      timer = props.time > 60 ? setInterval(updateSeconds, 1000) : setInterval(updateDecimals, 100)
     })
     onBeforeUnmount(() => {
       clearInterval(timer)

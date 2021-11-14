@@ -26,20 +26,22 @@
       </div>
       <q-dialog
           v-model="timeoutMode">
-          <q-card>
-            <q-card-section class="justify-center">
+          <q-card style="width: 400px; max-width: 80vw;">
+            <q-card-section class="row items-center q-pb-none">
               <div class="text-h6">Timeout {{ timeoutTeam }}</div>
+              <q-space />
+              <q-btn icon="close" flat round dense v-close-popup />
             </q-card-section>
             <q-card-section class="q-pt-none">
               <div class="column items-center">
-                <CountDown v-bind:time="60" @time-elapsed="onTimeoutEnd"/>
+                <CountDown v-bind:time="timeoutTime" @time-elapsed="onTimeoutEnd"/>
               </div>
             </q-card-section>
          </q-card>
       </q-dialog>
       <q-dialog
               v-model="breakMode">
-             <q-card persistent style="width: 700px; max-width: 80vw;">
+             <q-card style="width: 700px; max-width: 80vw;">
                <q-card-section class="row items-center q-pb-none">
                    <div class="text-h6">Intervallo</div>
                    <q-space />
@@ -47,7 +49,22 @@
                  </q-card-section>
                 <q-card-section class="q-pt-none">
                   <div class="column items-center">
-                    <CountDown v-bind:time="600" @time-elapsed="onBreakEnd"/>
+                    <CountDown v-bind:time="intervalTime" @time-elapsed="onBreakEnd"/>
+                  </div>
+                </q-card-section>
+             </q-card>
+      </q-dialog>
+      <q-dialog
+              v-model="warmupMode">
+             <q-card style="width: 700px; max-width: 80vw;">
+               <q-card-section class="row items-center q-pb-none">
+                   <div class="text-h6">Riscaldamento</div>
+                   <q-space />
+                   <q-btn icon="close" flat round dense v-close-popup />
+                 </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <div class="column items-center">
+                    <CountDown v-bind:time="warmupTime" @time-elapsed="onWarmupEnd"/>
                   </div>
                 </q-card-section>
              </q-card>
@@ -80,6 +97,12 @@ export default defineComponent({
         $store.commit('scoreboard/updateBreakMode', val)
       }
     })
+    const warmupMode = computed({
+      get: () => $store.getters['scoreboard/warmupMode'],
+      set: val => {
+        $store.commit('scoreboard/updateWarmUpMode', val)
+      }
+    })
     const period = computed({
       get: () => $store.getters['scoreboard/period'],
       set: val => {
@@ -92,20 +115,42 @@ export default defineComponent({
     const visitorTeam = computed(() => {
       return $store.getters['scoreboard/visitorTeam']
     })
-    const timeoutMode = computed(() => {
+    /* const timeoutMode = computed(() => {
       return $store.getters['scoreboard/timeoutMode']
+    }) */
+    const timeoutMode = computed({
+      get: () => $store.getters['scoreboard/timeoutMode'],
+      set: val => {
+        $store.commit('scoreboard/finishTimeout')
+      }
     })
     const timeoutTeam = computed(() => {
       return $store.getters['scoreboard/timeoutTeam']
     })
+
+    const timeoutTime = computed(() => {
+      return $store.getters['scoreboard/timeoutTime']
+    })
+
+    const intervalTime = computed(() => {
+      return $store.getters['scoreboard/intervalTime']
+    })
+
+    const warmupTime = computed(() => {
+      return $store.getters['scoreboard/warmupTime']
+    })
+
     const onBreakEnd = () => {
       breakMode.value = false
     }
     const onTimeoutEnd = () => {
       $store.commit('scoreboard/finishTimeout')
     }
+    const onWarmupEnd = () => {
+      warmupMode.value = false
+    }
 
-    return { breakMode, period, timeoutMode, timeoutTeam, homeTeam, visitorTeam, onTimeoutEnd, onBreakEnd }
+    return { breakMode, warmupMode, period, timeoutMode, timeoutTeam, timeoutTime, intervalTime, warmupTime, homeTeam, visitorTeam, onTimeoutEnd, onBreakEnd, onWarmupEnd }
   }
 })
 </script>

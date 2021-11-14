@@ -1,12 +1,19 @@
 export default function () {
   return {
+    matchStartTime: null,
+    matchEndTime: null,
+    periodStartTime: null,
+    periodEndTime: null,
+    originalMatchTime: null,
     period: 1,
     matchTime: 1200,
-    timeout: 60, // durata di un timeout
-    interval: 600, // 10 minuti
+    timeoutTime: 60, // durata di un timeout
+    warmupTime: 1200,
+    intervalTime: 600, // 10 minuti
     playMode: false,
     timeoutMode: false,
     breakMode: false,
+    warmupMode: false,
     timeoutTeam: '',
     teams: [
       {
@@ -28,6 +35,6 @@ export default function () {
         completedPenalties: [] // {player: 47, duration: 120, foulTime: 1100}
       }
     ],
-    scores: []
+    events: []
   }
 }
