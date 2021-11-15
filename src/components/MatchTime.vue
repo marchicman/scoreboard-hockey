@@ -1,6 +1,10 @@
 <template lang="html">
   <div class="column items-center">
-    <CountDown v-model:time="matchTime" v-bind:is-running="playMode" v-bind:size="20" :key="step"/>
+    <CountDown v-model:time="matchTime"
+               v-bind:is-running="playMode"
+               v-bind:show-decimal="true"
+               v-bind:size="20"
+               :key="step"/>
     <div class="col">
       <q-btn :icon="btnIcon" @click="onPlayClicked"/>
     </div>

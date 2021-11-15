@@ -8,8 +8,19 @@ export const formatTime = (seconds) => {
 
 // formatta secondi in ss.dd
 export const formatTimeDecimals = (seconds) => {
-  const remainingSeconds = (Math.round((seconds % 60) * 100) / 100) + ''
-  const ret = remainingSeconds.padStart(2, '0')
+  const remainingSeconds = (Math.round((seconds % 60) * 10) / 10)
+  // const ret = remainingSeconds.padStart(2, '0')
   // se ret = 59.9 torno 59.90
-  return ret.length === 4 ? ret + '0' : ret
+  // return ret.length === 4 ? ret + '0' : ret
+  // 23 % 1 = 0
+  let retVal = remainingSeconds + ''
+  /*  if (remainingSeconds < 10 && remainingSeconds > 0) {
+    retVal = '0' + retVal
+  } */
+  if (remainingSeconds % 1 === 0) {
+    // non ha parte decimale
+    retVal += '.0'
+  }
+
+  return retVal
 }

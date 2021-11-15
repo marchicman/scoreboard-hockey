@@ -24,15 +24,22 @@ export default defineComponent({
     size: {
       type: Number,
       default: 10
+    },
+    showDecimal: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['time-elapsed', 'update:time'],
   setup (props, context) {
     let timer
     const updateSeconds = () => {
-      if (seconds.value === 60) {
+      if (seconds.value === 60 && props.showDecimal) {
         clearInterval(timer)
-        timer = setInterval(updateDecimals, 100)
+        timer = setInterval(updateDecimals, 10)
+      } else if (seconds.value === 0) {
+        clearInterval(timer)
+        context.emit('time-elapsed')
       } else if (props.isRunning) {
         seconds.value--
         context.emit('update:time', seconds.value)
@@ -40,11 +47,12 @@ export default defineComponent({
     }
 
     const updateDecimals = () => {
-      if (seconds.value === 0) {
+      // console.log(seconds.value)
+      if (seconds.value === 0.0) {
         clearInterval(timer)
         context.emit('time-elapsed')
       } else if (props.isRunning) {
-        seconds.value = seconds.value - 0.01
+        seconds.value = Math.round(((seconds.value - 0.01) % 60) * 100) / 100
         context.emit('update:time', seconds.value)
       }
     }
@@ -54,10 +62,10 @@ export default defineComponent({
     })
     const seconds = ref(props.time)
     const timePassed = computed(() => {
-      return seconds.value >= 60 ? formatTime(seconds.value) : formatTimeDecimals(seconds.value)
+      return seconds.value >= 60 || !props.showDecimal ? formatTime(seconds.value) : formatTimeDecimals(seconds.value)
     })
     onBeforeMount(() => {
-      timer = props.time > 60 ? setInterval(updateSeconds, 1000) : setInterval(updateDecimals, 100)
+      timer = props.time > 60 || !props.showDecimal ? setInterval(updateSeconds, 1000) : setInterval(updateDecimals, 10)
     })
     onBeforeUnmount(() => {
       clearInterval(timer)
