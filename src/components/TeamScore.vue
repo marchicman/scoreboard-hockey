@@ -142,12 +142,6 @@ export default defineComponent({
         $store.commit('scoreboard/updateTeamName', { teamId: props.team.id, name: val })
       }
     })
-    /* const teamScore = computed({
-      get: () => props.team.score,
-      set: val => {
-        $store.commit('scoreboard/updateScore', { teamId: props.team.id, score: val })
-      }
-    }) */
     const teamScore = computed(() => {
       return props.team.score
     })

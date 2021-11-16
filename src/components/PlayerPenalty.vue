@@ -63,7 +63,17 @@ export default defineComponent({
     /* const penaltyDuration = computed(() => {
       return props.penalty.duration
     }) */
-    const penaltyDuration = ref(props.penalty.duration)
+    // const penaltyDuration = ref(props.penalty.duration)
+    const penaltyDuration = computed({
+      get: () => props.penalty.duration,
+      set: val => {
+        $store.commit('scoreboard/updatePenaltyDuration', {
+          teamId: props.teamId,
+          playerNumber: props.penalty.player,
+          duration: val
+        })
+      }
+    })
     const playMode = computed(() => {
       return $store.getters['scoreboard/playMode']
     })

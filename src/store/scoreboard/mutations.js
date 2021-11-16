@@ -133,6 +133,22 @@ export const updateTeamName = (state, payload) => {
   }
 }
 
+export const updatePenaltyDuration = (state, payload) => {
+  const team = state.teams.filter(t => {
+    return t.id === payload.teamId
+  })[0]
+
+  if (team) {
+    const penaltyIdx = team.penalties.findIndex(p => {
+      return p.player === payload.playerNumber
+    })
+    if (penaltyIdx > -1) {
+      const penalty = team.penalties[penaltyIdx]
+      penalty.duration = payload.duration
+    }
+  }
+}
+
 export const insertEvent = (state, payload) => {
   const event = { ...payload }
   event.period = state.period
