@@ -1,5 +1,5 @@
 <template lang="html">
-  <q-card class="my-card" flat bordered>
+  <q-card class="my-card" flat>
       <q-card-section horizontal>
         <q-card-section>
           <span class="digit">{{ playerNumber }}</span>
@@ -12,6 +12,7 @@
                       v-bind:is-running="playMode"
                       @time-elapsed="onPenaltyEnd"
                       @update:time="onUpdateTime"
+                      size="8"
                       :key="step"/>
         </q-card-section>
 
@@ -95,13 +96,9 @@ export default defineComponent({
 </script>
 
   <style lang="sass" scoped>
-  .my-card
-    width: 100%
-    max-width: 350px
-
   .digit
     font-family: clockicons
-    font-size: 10vh
+    font-size: 8vh
     color: red
 
   </style>

@@ -53,3 +53,7 @@ export function period (state) {
 export function breakMode (state) {
   return state.breakMode
 }
+
+export function events (state) {
+  return state.events
+}

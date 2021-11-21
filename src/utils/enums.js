@@ -22,6 +22,6 @@ const eventTypesEnum = new Enum(
   'timeout' // 7
 )
 
-// const eventTypes = [...eventTypesEnum]; // Array of the enum values as strings
+const eventTypes = [...eventTypesEnum] // Array of the enum values as strings
 
-export { eventTypesEnum }
+export { eventTypesEnum, eventTypes }

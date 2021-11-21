@@ -1,10 +1,10 @@
 <template>
   <q-page>
-      <div class="row items-start justify-center">
-        <div class="col-3">
-            <TeamScore :team="homeTeam"/>
+      <div class="row items-center">
+        <div class="col-4" style="align-self:flex-start;">
+            <TeamScore :team="homeTeam" style="align-content:stretch;"/>
         </div>
-        <div class="col-6">
+        <div class="col-4">
           <div class="column items-center">
             <div class="col">
               <MatchTime />
@@ -20,8 +20,8 @@
             </div>
           </div>
         </div>
-        <div class="col-3">
-          <TeamScore :team="visitorTeam"/>
+        <div class="col-4" style="align-self:flex-start;">
+          <TeamScore :team="visitorTeam" style="align-content:stretch;" align-style="flex-end"/>
         </div>
       </div>
       <q-dialog
@@ -158,14 +158,14 @@ export default defineComponent({
 <style lang="css" scoped>
 .period_label {
     font-weight: bold;
-    font-size: 3vh;
+    font-size: 5vh;
 
 }
 
 .period_digit {
   font-family: clockicons;
-  font-size: 8vh;
-  color: red;
+  font-size: 14vh;
+  color: #0ff026;
 }
 
 .clock {

@@ -90,11 +90,11 @@ const pageList = [
     icon: 'home',
     to: 'home'
   },
-  /*  {
+  {
     title: 'Statistiche',
     icon: 'insights',
     to: 'statistics'
-  }, */
+  },
   {
     title: 'Impostazioni',
     icon: 'settings',

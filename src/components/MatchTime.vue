@@ -3,7 +3,7 @@
     <CountDown v-model:time="matchTime"
                v-bind:is-running="playMode"
                v-bind:show-decimal="true"
-               v-bind:size="20"
+               v-bind:size="18"
                :key="step"/>
     <div class="col">
       <q-btn :icon="btnIcon" @click="onPlayClicked"/>

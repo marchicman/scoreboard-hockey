@@ -1,38 +1,40 @@
 <template lang="html">
-  <div class="column">
-  <q-card>
-     <q-card-section class="q-pt-none">
-       <q-item>
-         <q-item-section class="text-h6">{{ teamName }}</q-item-section>
-       </q-item>
-      </q-card-section>
+  <div class="column" >
+    <div class="col" :style="styleObject">
+      <q-card flat class="my-card">
+         <q-card-section class="q-pt-none">
+           <q-item>
+             <q-item-section class="text-h6">{{ teamName }}</q-item-section>
+           </q-item>
+          </q-card-section>
 
-      <q-separator inset />
+          <q-separator inset />
 
-      <q-card-section class="flex items-center justify-center">
-        <div class="column items-center cursor-pointer">
-          <span class="teamscore" @click="score = true" :disable="playMode">{{ teamScore }}</span>
-        </div>
-      </q-card-section>
+          <q-card-section class="flex items-center justify-center">
+            <div class="column items-center cursor-pointer">
+              <span class="teamscore" @click="score = true" :disable="playMode">{{ teamScore }}</span>
+            </div>
+          </q-card-section>
 
-      <q-separator />
-      <q-card-actions>
-         <q-btn push
-                color="white"
-                text-color="primary"
-                label="Timeout"
-                @click="callTimeout" :disable="playMode">
-           <q-badge color="orange" floating>{{ teamTimeout }}</q-badge>
-          </q-btn>
-          <q-btn
-                push
-                color="white"
-                text-color="primary"
-                label="Penalità"
-                @click="penalty = true" :disable="playMode"/>
-      </q-card-actions>
-    </q-card>
-      <div class="col">
+          <q-separator inset />
+          <q-card-actions>
+             <q-btn push
+                    color="white"
+                    text-color="primary"
+                    label="Timeout"
+                    @click="callTimeout" :disable="playMode">
+               <q-badge color="orange" floating>{{ teamTimeout }}</q-badge>
+              </q-btn>
+              <q-btn
+                    push
+                    color="white"
+                    text-color="primary"
+                    label="Penalità"
+                    @click="penalty = true" :disable="playMode"/>
+          </q-card-actions>
+        </q-card>
+      </div>
+      <div class="col" :style="styleObject">
         <PlayerPenalty v-for="teamPenalty in teamPenalties" :teamId="teamId" :penalty="teamPenalty" :key="teamPenalty.player" class="q-mt-xs"/>
       </div>
       <q-dialog v-model="penalty">
@@ -119,6 +121,10 @@ export default defineComponent({
     team: {
       type: Object,
       required: true
+    },
+    alignStyle: {
+      type: String,
+      default: 'flex-start'
     }
   },
   setup (props) {
@@ -132,7 +138,9 @@ export default defineComponent({
     const goal = ref(0)
     const playerGoal = ref(null)
     const playerAssist = ref(null)
-
+    const styleObject = ref({
+      'align-self': props.alignStyle
+    })
     const teamId = computed(() => {
       return props.team.id
     })
@@ -193,6 +201,7 @@ export default defineComponent({
     }
 
     return {
+      styleObject,
       score,
       goal,
       playerGoal,
@@ -225,7 +234,12 @@ h2 {
 
 .teamscore {
   font-family: clockicons;
-  font-size: 12vh;
-  color: red;
+  font-size: 18vh;
+  color: yellow;
+}
+
+.my-card {
+  width: 100%;
+  max-width: 280px;
 }
 </style>

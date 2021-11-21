@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="row items-center">
-    <div class="col" v-bind:style="{ fontFamily: 'clockicons', color: 'red', fontSize: digitSize }">
+    <div class="col" v-bind:style="{ fontFamily: 'clockicons', color: 'yellow', fontSize: digitSize }">
       {{ timePassed }}
     </div>
   </div>

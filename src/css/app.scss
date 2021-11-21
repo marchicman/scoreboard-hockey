@@ -8,3 +8,12 @@
   url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
   url("../themes/fonts/clockicons/84cb021d5f9af287ffff84b61beef6dc.svg#clockicons") format("svg"); /* iOS 4.1- */
 }
+
+body.body--dark {
+  background: #0d174a;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
