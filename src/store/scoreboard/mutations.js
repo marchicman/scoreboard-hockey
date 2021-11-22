@@ -53,7 +53,8 @@ export const timeoutCalled = (state, teamId) => {
     team.timeout++
     insertEvent(state, {
       type: eventTypesEnum.timeout,
-      teamId: teamId
+      teamId: teamId,
+      teamName: team.name
     })
   }
 }
@@ -95,6 +96,7 @@ export const finishPenalty = (state, payload) => {
       insertEvent(state, {
         type: eventTypesEnum.end_penalty,
         teamId: payload.teamId,
+        teamName: team.name,
         player: payload.playerNumber
       })
     }
@@ -107,11 +109,12 @@ export const insertPenalty = (state, payload) => {
   })[0]
 
   if (team) {
-    const obj = { player: payload.foulPlayer, duration: (+payload.foulTime * 60), period: state.period, foulTime: state.matchTime, foulType: payload.foulType }
+    const obj = { player: payload.foulPlayer, duration: (+payload.foulTime * 60), foulTime: state.matchTime, foulType: payload.foulType }
     team.penalties.push(obj)
     insertEvent(state, {
       type: eventTypesEnum.begin_penalty,
       teamId: payload.teamId,
+      teamName: team.name,
       player: obj.player,
       duration: obj.duration,
       description: obj.foulType
@@ -154,6 +157,7 @@ export const insertEvent = (state, payload) => {
   event.period = state.period
   event.matchTime = formatTime(state.matchTime)
   event.eventDate = new Date()
+  event.matchTimeElapsed = formatTime(state.originalMatchTime - state.matchTime)
   switch (payload.type) {
     case eventTypesEnum.goal: {
       const team = state.teams.filter(t => {
@@ -161,6 +165,7 @@ export const insertEvent = (state, payload) => {
       })[0]
       if (team) {
         team.score = payload.score
+        event.teamName = team.name
       }
       break
     }
