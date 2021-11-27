@@ -23,12 +23,12 @@
        <q-item clickable v-close-popup>
             <q-item-section @click="onPenaltyEnd">Chiudi</q-item-section>
        </q-item>
-       <q-item clickable v-close-popup>
+    <!--   <q-item clickable v-close-popup>
             <q-item-section @click="() => adjustPenalty(1)">+1 sec</q-item-section>
        </q-item>
        <q-item clickable v-close-popup>
             <q-item-section @click="() => adjustPenalty(-1)">-1 sec</q-item-section>
-       </q-item>
+       </q-item> -->
    </q-menu>
     </q-card>
 </template>
@@ -99,6 +99,6 @@ export default defineComponent({
   .digit
     font-family: clockicons
     font-size: 8vh
-    color: red
+    color: yellow
 
   </style>

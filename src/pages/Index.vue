@@ -10,7 +10,7 @@
               <MatchTime />
             </div>
             <div class="col-auto q-mt-md">
-              <span class="period_label">Periodo</span>
+              <span class="period_label text-uppercase">Periodo</span>
             </div>
             <div class="col-auto period_digit cursor-pointer">
               <span>{{ period }}</span>
@@ -165,7 +165,7 @@ export default defineComponent({
 .period_digit {
   font-family: clockicons;
   font-size: 14vh;
-  color: #0ff026;
+  color: yellow;
 }
 
 .clock {

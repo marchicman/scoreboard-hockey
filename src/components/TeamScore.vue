@@ -4,7 +4,7 @@
       <q-card flat class="my-card">
          <q-card-section class="q-pt-none">
            <q-item>
-             <q-item-section class="text-h6">{{ teamName }}</q-item-section>
+             <q-item-section class="text-h3 text-uppercase">{{ teamName }}</q-item-section>
            </q-item>
           </q-card-section>
 
