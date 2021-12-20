@@ -7,7 +7,22 @@
         <div class="col-4">
           <div class="column items-center">
             <div class="col">
-              <MatchTime />
+              <MatchTime v-show="matchMode"/>
+              <CountDown v-bind:time="timeoutTime"
+                         @time-elapsed="onTimeoutEnd"
+                         v-if="timeoutMode"
+                         v-bind:size="18"
+                         v-bind:is-running="timeoutMode"/>
+              <CountDown v-bind:time="intervalTime"
+                         @time-elapsed="onBreakEnd"
+                         v-if="breakMode"
+                         v-bind:size="18"
+                         v-bind:is-running="breakMode"/>
+              <CountDown v-bind:time="warmupTime"
+                         @time-elapsed="onWarmupEnd"
+                         v-if="warmupMode"
+                         v-bind:size="18"
+                         v-bind:is-running="warmupMode"/>
             </div>
             <div class="col-auto q-mt-md">
               <span class="period_label text-uppercase">Periodo</span>
@@ -18,13 +33,16 @@
                 <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
               </q-popup-edit>
             </div>
+            <div class="col-auto q-mt-md text-center">
+              <span class="text-uppercase text-h2 text-bold">{{ infoMsg }}</span>
+            </div>
           </div>
         </div>
         <div class="col-4" style="align-self:flex-start;">
           <TeamScore :team="visitorTeam" style="align-content:stretch;" align-style="flex-end"/>
         </div>
       </div>
-      <q-dialog
+      <!--  <q-dialog
           v-model="timeoutMode">
           <q-card style="width: 400px; max-width: 80vw;">
             <q-card-section class="row items-center q-pb-none">
@@ -68,13 +86,14 @@
                   </div>
                 </q-card-section>
              </q-card>
-      </q-dialog>
+      </q-dialog> -->
   </q-page>
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
 
 import MatchTime from 'components/MatchTime.vue'
 import TeamScore from 'components/TeamScore.vue'
@@ -90,6 +109,7 @@ export default defineComponent({
   },
   setup () {
     const $store = useStore()
+    const $q = useQuasar()
 
     const breakMode = computed({
       get: () => $store.getters['scoreboard/breakMode'],
@@ -124,6 +144,18 @@ export default defineComponent({
         $store.commit('scoreboard/finishTimeout')
       }
     })
+
+    const playMode = computed({
+      get: () => $store.getters['scoreboard/playMode'],
+      set: val => {
+        $store.commit('scoreboard/updatePlayMode', val)
+      }
+    })
+
+    const matchMode = computed(() => {
+      return $store.getters['scoreboard/matchMode']
+    })
+
     const timeoutTeam = computed(() => {
       return $store.getters['scoreboard/timeoutTeam']
     })
@@ -140,6 +172,10 @@ export default defineComponent({
       return $store.getters['scoreboard/warmupTime']
     })
 
+    const infoMsg = computed(() => {
+      return $store.getters['scoreboard/infoMsg']
+    })
+
     const onBreakEnd = () => {
       breakMode.value = false
     }
@@ -150,7 +186,54 @@ export default defineComponent({
       warmupMode.value = false
     }
 
-    return { breakMode, warmupMode, period, timeoutMode, timeoutTeam, timeoutTime, intervalTime, warmupTime, homeTeam, visitorTeam, onTimeoutEnd, onBreakEnd, onWarmupEnd }
+    const keyListener = (e) => {
+      if ($store.getters['scoreboard/penaltyMode']) {
+        return
+      }
+      // https://forum.quasar-framework.org/topic/4859/where-do-i-find-docs-info-on-custom-keyboard-shortcuts-solved/6
+      if (e.key === 's' && matchMode.value) {
+        playMode.value = !playMode.value
+      } else if (e.key === 'b') {
+        breakMode.value = !breakMode.value
+      } else if (e.key === 'w') {
+        warmupMode.value = !warmupMode.value
+      } else if (e.key === 'i') {
+        onTimeoutEnd()
+      } else if (e.key === 'f') {
+        $q.fullscreen.toggle()
+      } else if (e.key === 'd') {
+        $q.dark.toggle()
+      }
+    }
+
+    onMounted(() => {
+      console.log('onMounted')
+      document.addEventListener('keydown', keyListener)
+    })
+
+    onUnmounted(() => {
+      console.log('onUnmounted')
+      document.removeEventListener('keydown', keyListener)
+    })
+
+    return {
+      breakMode,
+      matchMode,
+      warmupMode,
+      playMode,
+      period,
+      infoMsg,
+      timeoutMode,
+      timeoutTeam,
+      timeoutTime,
+      intervalTime,
+      warmupTime,
+      homeTeam,
+      visitorTeam,
+      onTimeoutEnd,
+      onBreakEnd,
+      onWarmupEnd
+    }
   }
 })
 </script>
@@ -159,7 +242,6 @@ export default defineComponent({
 .period_label {
     font-weight: bold;
     font-size: 5vh;
-
 }
 
 .period_digit {

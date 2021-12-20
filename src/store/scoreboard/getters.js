@@ -14,8 +14,18 @@ export function intervalTime (state) {
   return state.intervalTime
 }
 
+export function matchMode (state) {
+  return !state.timeoutMode &&
+         !state.warmupMode &&
+         !state.breakMode
+}
+
 export function playMode (state) {
   return state.playMode
+}
+
+export function penaltyMode (state) {
+  return state.penaltyMode
 }
 
 export function timeoutMode (state) {
@@ -56,4 +66,17 @@ export function breakMode (state) {
 
 export function events (state) {
   return state.events
+}
+
+export function infoMsg (state) {
+  if (state.timeoutMode) {
+    // una delle due squadre ha chiesto un Timeout
+    return 'Timeout ' + state.timeoutTeam
+  } else if (state.warmupMode) {
+    return 'Riscaldamento'
+  } else if (state.breakMode) {
+    return 'Intervallo'
+  } else {
+    return ''
+  }
 }

@@ -103,6 +103,10 @@ export const finishPenalty = (state, payload) => {
   }
 }
 
+export const beginPenalty = (state, payload) => {
+  state.penaltyMode = true
+}
+
 export const insertPenalty = (state, payload) => {
   const team = state.teams.filter(t => {
     return t.id === payload.teamId
@@ -120,6 +124,7 @@ export const insertPenalty = (state, payload) => {
       description: obj.foulType
     })
   }
+  state.penaltyMode = false
 }
 
 export const updatePeriod = (state, payload) => {

@@ -17,7 +17,7 @@
           </q-card-section>
 
           <q-separator inset />
-          <q-card-actions>
+          <q-card-actions class="items-center justify-center">
              <q-btn push
                     color="white"
                     text-color="primary"
@@ -30,7 +30,7 @@
                     color="white"
                     text-color="primary"
                     label="Penalità"
-                    @click="penalty = true" :disable="playMode"/>
+                    @click="beginPenalty" :disable="playMode"/>
           </q-card-actions>
         </q-card>
       </div>
@@ -60,7 +60,8 @@
               <q-input
                       filled
                       v-model="foulType"
-                      label="Descrizione"/>
+                      label="Descrizione"
+                      @keydown="keyFoulType"/>
               <div>
                 <q-btn label="Ok" type="submit" color="primary"/>
                 <q-btn label="Chiudi" type="reset" color="primary" flat class="q-ml-sm" />
@@ -200,6 +201,11 @@ export default defineComponent({
       goal.value = teamScore.value
     }
 
+    const beginPenalty = () => {
+      penalty.value = true
+      $store.commit('scoreboard/beginPenalty')
+    }
+
     return {
       styleObject,
       score,
@@ -221,7 +227,8 @@ export default defineComponent({
       onSubmit,
       initializeScoreAssist,
       onResetScoreAssist,
-      onSubmitScoreAssist
+      onSubmitScoreAssist,
+      beginPenalty
     }
   }
 })
@@ -239,7 +246,10 @@ h2 {
 }
 
 .my-card {
-  width: 100%;
-  max-width: 280px;
+  width: 280px;
+  /* max-width: 280px; */
+  border-radius: 50px;
+  border: 2px solid #607d8b;
+  margin: 5px;
 }
 </style>

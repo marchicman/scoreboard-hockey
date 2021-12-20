@@ -15,6 +15,7 @@ export default function () {
     breakMode: false,
     warmupMode: false,
     timeoutTeam: '',
+    penaltyMode: false,
     teams: [
       {
         id: 1,

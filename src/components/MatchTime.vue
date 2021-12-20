@@ -44,22 +44,22 @@ export default defineComponent({
     const onPlayClicked = () => {
       playMode.value = !playMode.value
     }
-    const increaseMatchTime = (val) => {
+    /*  const increaseMatchTime = (val) => {
       $store.commit('scoreboard/increaseMatchTime', 60 * val)
       step.value += 60 * val
     }
     const decreaseMatchTime = (val) => {
       $store.commit('scoreboard/increaseMatchTime', -60 * val)
       step.value -= 60 * val
-    }
+    } */
     return {
       step,
       matchTime,
       playMode,
       btnIcon,
-      onPlayClicked,
-      increaseMatchTime,
-      decreaseMatchTime
+      onPlayClicked
+      // increaseMatchTime,
+      // decreaseMatchTime
     }
   }
 })
